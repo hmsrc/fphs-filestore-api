@@ -12,9 +12,13 @@ The following prerequisites must be available for these scripts to run:
 
 ## Uploading a directory of files to containers based on an ID
 
-The script `upload-to-external-id-container` runs through all the files in a specified directory, using the filename on each file to look up the container to upload to. The upload is then performed.
+The script `upload-to-external-id-container` runs through all the files in a specified directory, using the filename on each file to look up the container to upload to. The file may be renamed with a suffix prior to uploading. The upload is then performed.
 
-The file may be renamed with a suffix prior to uploading.
+On the first script run, sub-directories will be created within the upload directory for files in specific statuses:
+
+- failed
+- in-progress
+- success
 
 For example, to upload to MRI containers on IPA Filestore, using filenames formatted like `<ipa-id>.tar.gz` to identify the IPA participant to upload to.
 Each file will have the suffix "_diffusion" added prior to upload, so they appear as `<ipa-id>_diffusion.tar.gz`
