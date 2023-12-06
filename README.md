@@ -46,6 +46,12 @@ export external_id_attribute='ipa_id'
 # Resource name for the report used to match IDs to containers
 export report_name='ipa_files_api__ipa_find_container'
 
+# Optionally set curl command additional arguments and flags
+# This defaults to '-s' for silent requests
+# export curl_args='-s -v'
+# or use a space to use no flags
+# export curl_args=' '
+
 # Now run the script
 ./upload-to-external-id-container.sh ${upload_dir}
 ```

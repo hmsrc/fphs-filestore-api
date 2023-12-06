@@ -1,5 +1,31 @@
 #!/bin/bash
-export curl_args="-s"
+# See README.md to see information on usage
+
+# Prior to calling, export the following environment variables:
+
+# # The user credentials
+# export upload_user_email='<api username>'
+# export upload_user_token='<private token>'
+# # The server to upload to
+# export upload_server="https://<server domain name>"
+# # Add _diffusion to the filename before uploading
+# export fn_suffix='_diffusion'
+# # Sets the IPA app
+# export upload_app_type=7
+# # Sets up the container types to load to
+# export activity_log_type='activity_log__study_assignment_session_filestore'
+# export container_name='mri'
+# # File types to upload
+# export file_ext='.tar.gz'
+# # External ID attribute to find containers on
+# export external_id_attribute='study_id'
+# # Resource name for the report used to match IDs to containers
+# export report_name='study_files_api__study_find_container'
+
+# To run the script, specify the first argument with the directory to upload from
+# ./upload-to-external-id-container.sh '<absolute path to directory>'
+
+export curl_args=${curl_args:-"-s"}
 
 curr_dir="$(pwd)"
 input_dir="$1"
@@ -46,12 +72,13 @@ if [ ! "$(ls *${file_ext} 2> /dev/null)" ]; then
 fi
 
 function set_app_or_exit() {
+  echo "Attempting initial connection to set app type to ${upload_app_type}"
   local auth_string="use_app_type=${upload_app_type}&user_email=${upload_user_email}&user_token=${upload_user_token}"
   local url="${upload_server}/reports?use_app_type=${upload_app_type}"
   local app_set_res="$(curl ${curl_args} ${url})"
   res=$?
   if [ ${res} != 0 ]; then
-    echo -e "\e[31mError ${res}:\e[0m Failed to set up the app" >&2
+    echo -e "\e[31mcURL Error ${res}:\e[0m Failed to set up the app" >&2
     echo "${app_set_res}" >&2
     exit 41
   fi
@@ -72,7 +99,7 @@ function get_upload_details() {
   activities="$(curl ${curl_args} ${url})"
   res=$?
   if [ ${res} != 0 ]; then
-    echo -e "\e[31mError ${res}:\e[0m Failed to get details for Participant ID ${ext_id}" >&2
+    echo -e "\e[31mcURL Error ${res}:\e[0m Failed to get details for Participant ID ${ext_id}" >&2
     echo "URL: ${report_url}&<auth string>"
     echo "${activities}" >&2
     return 21
