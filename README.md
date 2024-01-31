@@ -9,6 +9,7 @@ The following prerequisites must be available for these scripts to run:
 - curl
 - awk
 - md5sum
+- split
 
 ## Uploading a directory of files to containers based on an ID
 
